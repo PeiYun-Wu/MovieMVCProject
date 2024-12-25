@@ -1,5 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using PennyProject.DataBase.MovieDB;
+
 var builder = WebApplication.CreateBuilder(args);
 
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json").Build();
+
+#region db context
+builder.Services.AddDbContext<PennyMovieDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+#endregion
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
