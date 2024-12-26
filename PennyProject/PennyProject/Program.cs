@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using NLog;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using PennyProject.DataBase.MovieDB;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,17 @@ builder.Services.AddDbContext<PennyMovieDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 #endregion
+
+#region NLog
+var nlogConfig = configuration.GetSection("NLog");
+LogManager.Configuration = new NLogLoggingConfiguration(nlogConfig);
+
+builder.Logging.ClearProviders();
+
+var nlogOptions = new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = false };
+builder.Host.UseNLog(nlogOptions);
+#endregion
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
