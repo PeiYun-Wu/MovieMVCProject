@@ -1,8 +1,154 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using PennyProject.DataBase.MovieDB
+@model Dictionary<string, List<MovieInfo>>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+<style>
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .movie-section {
+        margin: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+        color: #fff;
+    }
+
+    .movie-row {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 1rem 2rem;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+        .movie-row::-webkit-scrollbar {
+            display: none;
+        }
+
+    .movie-card {
+        flex: 0 0 auto;
+        width: 200px;
+        margin-right: 1rem;
+        transition: transform 0.3s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+    .movie-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .movie-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        padding: 1rem;
+        border-radius: 0 0 8px 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .movie-card:hover .movie-info {
+        opacity: 1;
+    }
+
+    .movie-title {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
+
+    .movie-year {
+        font-size: 0.9rem;
+        color: #aaa;
+    }
+
+    .scroll-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.7);
+        border: none;
+        color: white;
+        padding: 1rem;
+        cursor: pointer;
+        z-index: 3;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .scroll-left {
+        left: 0;
+    }
+
+    .scroll-right {
+        right: 0;
+    }
+
+    .scroll-button:hover {
+        background: rgba(255,255,255,0.1);
+    }
+</style>
+
+<div class="container-fluid">
+    @foreach (var country in Model)
+    {
+        <div class="movie-section">
+            <h2 class="section-title">@country.Key</h2>
+            <div class="position-relative">
+                <button class="scroll-button scroll-left" onclick="scrollSection(this, 'left')">❮</button>
+                <div class="movie-row">
+                    @foreach (var movie in country.Value)
+                    {
+                        <div class="movie-card">
+                            <img src="~/movieImg/@(movie.ImgName).jpg" alt="@movie.MovieChinessName" class="movie-image">
+                            <div class="movie-info">
+                                <div class="movie-title">@movie.MovieChinessName</div>
+                                <div class="movie-year">@(movie.ReleaseDateTime?.Year)</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <button class="scroll-button scroll-right" onclick="scrollSection(this, 'right')">❯</button>
+            </div>
+        </div>
+    }
 </div>
+
+<script>
+    function scrollSection(button, direction) {
+        const row = button.parentElement.querySelector('.movie-row');
+        const scrollAmount = 800;
+
+        if (direction === 'left') {
+            row.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        } else {
+            row.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    }
+</script>
