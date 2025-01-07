@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NuGet.Protocol.Plugins;
 using PennyProject.DataBase.MovieDB;
-using PennyProject.Helper;
 using PennyProject.Models;
 using System.Diagnostics;
 
@@ -51,12 +51,15 @@ namespace PennyProject.Controllers
                 }
 
                 HttpContext.Session.SetString("UserId", user.UserId);
+                _logger.LogDebug($"login user : {user.UserName}");
 
                 return Json(new simpleResponseDto
                 {
                     Success = true,
                     Message = $"Login Success! .. Hi {user.UserName}"
+                    
                 });
+                
             }
             catch (Exception ex)
             {

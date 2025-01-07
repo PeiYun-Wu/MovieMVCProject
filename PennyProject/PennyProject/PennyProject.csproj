@@ -7,19 +7,86 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\**" />
+    <Content Remove="Helper\**" />
+    <EmbeddedResource Remove="Helper\**" />
+    <None Remove="Helper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\movieImg\img_allQuiet.jpg" />
+    <Content Remove="wwwroot\movieImg\img_beforeSunrise.jpg" />
+    <Content Remove="wwwroot\movieImg\img_bullets.jpg" />
+    <Content Remove="wwwroot\movieImg\img_busan.jpg" />
+    <Content Remove="wwwroot\movieImg\img_constantine.jpg" />
+    <Content Remove="wwwroot\movieImg\img_interstellar.jpg" />
+    <Content Remove="wwwroot\movieImg\img_kano.jpg" />
+    <Content Remove="wwwroot\movieImg\img_kingsman.jpg" />
+    <Content Remove="wwwroot\movieImg\img_kungfu.jpg" />
+    <Content Remove="wwwroot\movieImg\img_lalaland.jpg" />
+    <Content Remove="wwwroot\movieImg\img_manInLove.jpg" />
+    <Content Remove="wwwroot\movieImg\img_memento.jpg" />
+    <Content Remove="wwwroot\movieImg\img_notebook.jpg" />
+    <Content Remove="wwwroot\movieImg\img_oneDay.jpg" />
+    <Content Remove="wwwroot\movieImg\img_parasite.jpg" />
+    <Content Remove="wwwroot\movieImg\img_princess.jpg" />
+    <Content Remove="wwwroot\movieImg\img_sassyGirl.jpg" />
+    <Content Remove="wwwroot\movieImg\img_secret.jpg" />
+    <Content Remove="wwwroot\movieImg\img_shawshank.jpg" />
+    <Content Remove="wwwroot\movieImg\img_spirited.jpg" />
+    <Content Remove="wwwroot\movieImg\img_spotlessMind.jpg" />
+    <Content Remove="wwwroot\movieImg\img_steelRain.jpg" />
+    <Content Remove="wwwroot\movieImg\img_taxiDriver.jpg" />
+    <Content Remove="wwwroot\movieImg\img_theWorstPerson.jpg" />
+    <Content Remove="wwwroot\movieImg\img_titanic.jpg" />
+    <Content Remove="wwwroot\movieImg\img_yourName.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.15" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.15" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppData\Image\" />
     <Folder Include="Filters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\movieImg\img_allQuiet.jpg" />
+    <None Include="wwwroot\movieImg\img_beforeSunrise.jpg" />
+    <None Include="wwwroot\movieImg\img_bullets.jpg" />
+    <None Include="wwwroot\movieImg\img_busan.jpg" />
+    <None Include="wwwroot\movieImg\img_constantine.jpg" />
+    <None Include="wwwroot\movieImg\img_interstellar.jpg" />
+    <None Include="wwwroot\movieImg\img_kano.jpg" />
+    <None Include="wwwroot\movieImg\img_kingsman.jpg" />
+    <None Include="wwwroot\movieImg\img_kungfu.jpg" />
+    <None Include="wwwroot\movieImg\img_lalaland.jpg" />
+    <None Include="wwwroot\movieImg\img_manInLove.jpg" />
+    <None Include="wwwroot\movieImg\img_memento.jpg" />
+    <None Include="wwwroot\movieImg\img_notebook.jpg" />
+    <None Include="wwwroot\movieImg\img_oneDay.jpg" />
+    <None Include="wwwroot\movieImg\img_parasite.jpg" />
+    <None Include="wwwroot\movieImg\img_princess.jpg" />
+    <None Include="wwwroot\movieImg\img_sassyGirl.jpg" />
+    <None Include="wwwroot\movieImg\img_secret.jpg" />
+    <None Include="wwwroot\movieImg\img_shawshank.jpg" />
+    <None Include="wwwroot\movieImg\img_spirited.jpg" />
+    <None Include="wwwroot\movieImg\img_spotlessMind.jpg" />
+    <None Include="wwwroot\movieImg\img_steelRain.jpg" />
+    <None Include="wwwroot\movieImg\img_taxiDriver.jpg" />
+    <None Include="wwwroot\movieImg\img_theWorstPerson.jpg" />
+    <None Include="wwwroot\movieImg\img_titanic.jpg" />
+    <None Include="wwwroot\movieImg\img_yourName.jpg" />
   </ItemGroup>
 
 </Project>

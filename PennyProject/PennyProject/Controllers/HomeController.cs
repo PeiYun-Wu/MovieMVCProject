@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PennyProject.DataBase.MovieDB;
-using PennyProject.Helper;
 using PennyProject.Models;
 using System.Diagnostics;
 using PennyProject.Models.Enum;
@@ -47,8 +46,7 @@ namespace PennyProject.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
-                NlogHelper.WriteLog(Helper.LogLevel.Error, ex.StackTrace, ex);
+                _logger.LogError(ex.ToString(), ex.StackTrace);
             }
             return View();
            
