@@ -1,0 +1,145 @@
+﻿@using PennyProject.DataBase.MovieDB
+
+@model List<MovieInfo>
+@{
+    ViewData["Title"] = "我的最愛";
+}
+
+<style>
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .refresh-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 0;
+        margin-top: 2rem;
+    }
+
+    .favorite-title {
+        color: #fff;
+        margin-bottom: 2rem;
+    }
+
+    .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 20px;
+    }
+
+    .movie-card {
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+    .movie-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .movie-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        padding: 1rem;
+        border-radius: 0 0 8px 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .movie-card:hover .movie-info {
+        opacity: 1;
+    }
+
+    .movie-title {
+        font-size: 0.9rem;
+        color: #fff;
+    }
+
+    .favorite-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #ff4d4d;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 3;
+    }
+
+        .favorite-icon:hover {
+            transform: scale(1.2);
+        }
+
+  
+</style>
+
+<div class="favorite-container">
+    <h3 class="favorite-title">Fav</h3>
+
+    <div class="movie-grid">
+        @foreach (var movie in Model)
+        {
+            <div class="movie-card">
+                <img src="~/movieImg/@(movie.ImgName).jpg" alt="@movie.MovieChinessName" class="movie-image">
+                <div class="movie-info">
+                    <div class="movie-title">@movie.MovieChinessName</div>
+                </div>
+                <i class="fas fa-heart favorite-icon" data-movie-id="@movie.MovieId"></i>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.favorite-icon').click(function () {
+                var $icon = $(this);
+                var $card = $icon.closest('.movie-card');
+                var movieId = $icon.data('movie-id');
+
+                $icon.css('pointer-events', 'none');  
+
+                $.ajax({
+                    url: '/api/favorite',
+                    type: 'DELETE',
+                    data: { movieId: movieId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            $card.fadeOut(300, function () {
+                                $(this).remove();
+                                if ($('.movie-card').length === 0) {
+                                    $('.movie-grid').html('<h4 style="color: #fff;">no data</h4>');
+                                }
+                            });
+                        } else {
+                            alert(response.message || 'remove failed!');
+                            $icon.css('pointer-events', 'auto');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('remove failed! wait..');
+                        $icon.css('pointer-events', 'auto');
+                    }
+                });
+            });
+
+           
+        });
+    </script>
+}

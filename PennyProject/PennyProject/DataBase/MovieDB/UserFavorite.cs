@@ -13,5 +13,4 @@ public partial class UserFavorite
 
     public DateTime? CreateDateTime { get; set; }
 
-    public DateTime? UpdateDateTime { get; set; }
 }

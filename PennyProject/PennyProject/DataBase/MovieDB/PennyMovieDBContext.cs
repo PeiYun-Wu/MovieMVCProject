@@ -51,7 +51,7 @@ public partial class PennyMovieDBContext : DbContext
 
         modelBuilder.Entity<UserFavorite>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => new { e.MemberId, e.MovieId });
 
             entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
             entity.Property(e => e.MemberId)
@@ -63,7 +63,7 @@ public partial class PennyMovieDBContext : DbContext
             entity.Property(e => e.MovieName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.UpdateDateTime).HasColumnType("datetime");
+           
         });
 
         modelBuilder.Entity<UserRole>(entity =>
