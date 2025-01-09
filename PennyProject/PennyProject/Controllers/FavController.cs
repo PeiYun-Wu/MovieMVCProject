@@ -21,6 +21,10 @@ namespace PennyProject.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = HttpContext.Session.GetString("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Login");  
+            }
 
             if (string.IsNullOrEmpty(userId))
             {
