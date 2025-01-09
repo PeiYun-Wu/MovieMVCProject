@@ -49,7 +49,7 @@ namespace PennyProject.Controllers
                 {
                     MemberId = userId,
                     MovieId = movieId,
-                    MovieName = movie.MovieChinessName,
+                    MovieChinessName = movie.MovieChinessName,
                     CreateDateTime = DateTime.Now
                 };
 
@@ -65,7 +65,7 @@ namespace PennyProject.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"MovieId {movieId}, add favorite failed: {ex.Message}");
+                _logger.LogError($"MovieId {movieId}, add favorite failed: {ex}");
                 return Json(new simpleResponseDto
                 {
                     Success = false,
@@ -105,7 +105,7 @@ namespace PennyProject.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Remove favorite failed: {ex.Message}");
+                _logger.LogError($"MovieId: {movieId} Remove favorite failed: {ex}");
                 return Json(new simpleResponseDto
                 {
                     Success = false,

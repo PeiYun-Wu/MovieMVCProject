@@ -9,7 +9,7 @@ public partial class UserFavorite
 
     public string MovieId { get; set; } = null!;
 
-    public string? MovieName { get; set; }
+    public string? MovieChinessName { get; set; }
 
     public DateTime? CreateDateTime { get; set; }
 

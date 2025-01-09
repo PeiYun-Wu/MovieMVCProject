@@ -60,10 +60,11 @@ public partial class PennyMovieDBContext : DbContext
             entity.Property(e => e.MovieId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.MovieName)
+            entity.Property(e => e.MovieChinessName)
                 .HasMaxLength(50)
-                .IsUnicode(false);
-           
+                .IsUnicode(true);
+
+
         });
 
         modelBuilder.Entity<UserRole>(entity =>

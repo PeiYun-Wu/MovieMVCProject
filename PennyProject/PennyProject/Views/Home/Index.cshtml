@@ -40,7 +40,6 @@
         margin-right: 1rem;
         transition: transform 0.3s ease;
         position: relative;
-        cursor: pointer;
     }
 
         .movie-card:hover {
@@ -107,6 +106,25 @@
     .scroll-button:hover {
         background: rgba(255,255,255,0.1);
     }
+
+    .favorite-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 3;
+        transition: all 0.3s ease;
+    }
+
+        .favorite-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .favorite-icon.fas {
+            color: #ff4d4d;
+        }
 </style>
 
 <div class="container-fluid">
@@ -115,7 +133,7 @@
         <div class="movie-section">
             <h2 class="section-title">@country.Key</h2>
             <div class="position-relative">
-                <button class="scroll-button scroll-left" onclick="scrollSection(this, 'left')">❮</button>
+                <button class="scroll-button scroll-left">❮</button>
                 <div class="movie-row">
                     @foreach (var movie in country.Value)
                     {
@@ -125,30 +143,95 @@
                                 <div class="movie-title">@movie.MovieChinessName</div>
                                 <div class="movie-year">@(movie.ReleaseDateTime?.Year)</div>
                             </div>
+                            @{
+                                var isFavorite = ((List<string>)ViewBag.UserFavorites).Contains(movie.MovieId);
+                                var heartClass = isFavorite ? "fas" : "far";
+                            }
+                            <i class="@heartClass fa-heart favorite-icon" data-movie-id="@movie.MovieId"></i>
                         </div>
                     }
                 </div>
-                <button class="scroll-button scroll-right" onclick="scrollSection(this, 'right')">❯</button>
+                <button class="scroll-button scroll-right">❯</button>
             </div>
         </div>
     }
 </div>
 
-<script>
-    function scrollSection(button, direction) {
-        const row = button.parentElement.querySelector('.movie-row');
-        const scrollAmount = 800;
-
-        if (direction === 'left') {
-            row.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.scroll-button.scroll-left').click(function () {
+                var movieRow = $(this).siblings('.movie-row');
+                movieRow.animate({
+                    scrollLeft: '-=800'
+                }, 300);
             });
-        } else {
-            row.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
+
+            $('.scroll-button.scroll-right').click(function () {
+                var movieRow = $(this).siblings('.movie-row');
+                movieRow.animate({
+                    scrollLeft: '+=800'
+                }, 300);
+            });
+
+            $('.favorite-icon').click(function () {
+                var $icon = $(this);
+                var movieId = $icon.data('movie-id');
+
+                $icon.css('pointer-events', 'none');
+
+                if ($icon.hasClass('far')) {  // 空心愛心
+                    addFavorite($icon, movieId);
+                } else {  // 實心愛心
+                    removeFavorite($icon, movieId);
+                }
+            });
+        });
+
+        function addFavorite($icon, movieId) {
+            $.ajax({
+                url: '/api/favorite',
+                type: 'POST',
+                data: { movieId: movieId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $icon.removeClass('far').addClass('fas');
+                    } else {
+                        alert(response.message || 'add failed..');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('add failed...please wait');
+                },
+                complete: function () {
+                    $icon.css('pointer-events', 'auto');
+                }
             });
         }
-    }
-</script>
+
+        function removeFavorite($icon, movieId) {
+            $.ajax({
+                url: '/api/favorite',
+                type: 'DELETE',
+                data: { movieId: movieId },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $icon.removeClass('fas').addClass('far');
+                    } else {
+                        alert(response.message || 'remove failed..');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('remove failed..please wait');
+                },
+                complete: function () {
+                    $icon.css('pointer-events', 'auto');
+                }
+            });
+        }
+    </script>
+}

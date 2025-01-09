@@ -22,25 +22,24 @@ namespace PennyProject.Controllers
         {
             try
             {
-                //var userId = HttpContext.Session.GetString("UserId");
+                var userId = HttpContext.Session.GetString("UserId");
 
-                // get movie info
-                var movies = await _dbcontext.MovieInfos
-                            .GroupBy(m => m.Country)
-                            .Select(g => new
-                            {
-                                Country = g.Key,
-                                Movies = g.OrderByDescending(m => m.ReleaseDateTime).ToList()
-                            })
-                            .ToListAsync();
+                var userFavorites = await _dbcontext.UserFavorites
+                                .Where(f => f.MemberId == userId)
+                                .Select(f => f.MovieId)
+                                .ToListAsync();
+                ViewBag.UserFavorites = userFavorites;
 
-                //order
+                var movies = await _dbcontext.MovieInfos.ToListAsync();
+
                 var moviesByCountry = movies
-                    .OrderBy(g => GetCountryOrder(g.Country))
+                    .GroupBy(m => m.Country)
+                    .OrderBy(g => GetCountryOrder(g.Key))
                     .ToDictionary(
-                        g => g.Country,
-                        g => g.Movies.ToList()
+                        g => g.Key,
+                        g => g.OrderByDescending(m => m.ReleaseDateTime).ToList()
                     );
+
 
                 return View(moviesByCountry);
             }
