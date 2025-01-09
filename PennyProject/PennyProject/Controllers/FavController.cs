@@ -6,6 +6,7 @@ using PennyProject.Models;
 
 namespace PennyProject.Controllers
 {
+   
     public class FavController : Controller
     {
         private readonly PennyMovieDBContext _dbContext;
@@ -37,7 +38,7 @@ namespace PennyProject.Controllers
             return View(favoriteMovies);
         }
 
-        [HttpPost("api/favorite")]
+        [HttpPost("api/Favorite")]
         public async Task<IActionResult> AddFavorite(string movieId)
         {
             try
@@ -73,7 +74,7 @@ namespace PennyProject.Controllers
                 });
             }
         }
-        [HttpDelete("api/favorite")]
+        [HttpDelete("api/Favorite")]
         public async Task<IActionResult> RemoveFavorite(string movieId)
         {
             try

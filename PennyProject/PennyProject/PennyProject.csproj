@@ -57,7 +57,6 @@
 
   <ItemGroup>
     <Folder Include="AppData\Image\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,120 @@
+﻿@using PennyProject.DataBase.MovieDB
+@model UserRole
+
+@{
+    ViewData["Title"] = "UserInfo";
+}
+
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Update User Information</h3>
+            </div>
+            <div class="card-body">
+                <form id="updateForm">
+                    <input type="hidden" id="UserId" value="@Model.UserId" />
+
+                    <div class="form-group mb-3">
+                        <label class="control-label">User Name</label>
+                        <input type="text" id="UserName" class="form-control" value="@Model.UserName" />
+                        <span class="text-danger field-validation-valid"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="control-label">New Password</label>
+                        <input type="password" id="Password" class="form-control" />
+                        <span class="text-danger field-validation-valid"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="control-label">Confirm Password</label>
+                        <input type="password" id="ConfirmPassword" class="form-control" />
+                        <span id="passwordMismatch" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="control-label">Email</label>
+                        <input type="email" id="Email" class="form-control" value="@Model.Email" />
+                        <span class="text-danger field-validation-valid"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="control-label">Age</label>
+                        <input type="number" id="Age" class="form-control" value="@Model.Age" />
+                        <span class="text-danger field-validation-valid"></span>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" onclick="updateUser()">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+       
+        function updateUser() {
+            var password = $("#Password").val();
+            var confirmPassword = $("#ConfirmPassword").val();
+
+            if (password !== confirmPassword) {
+                $("#passwordMismatch").text("Passwords do not match");
+                return;
+            }
+
+            if (!$("#UserName").val()) {
+                alert("Please enter User Name");
+                return;
+            }
+
+            if (!$("#Email").val()) {
+                alert("Please enter Email");
+                return;
+            }
+
+            var formData = {
+                UserId: $("#UserId").val(),
+                UserName: $("#UserName").val(),
+                Password: password,
+                Email: $("#Email").val(),
+                Age: $("#Age").val() ? parseInt($("#Age").val()) : null
+            };
+
+            $.ajax({
+                url: '/api/UpdateUser',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'User information updated successfully',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update user information: ' + error,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

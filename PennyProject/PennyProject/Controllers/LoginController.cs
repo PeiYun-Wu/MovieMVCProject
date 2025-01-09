@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NuGet.Protocol.Plugins;
 using PennyProject.DataBase.MovieDB;
 using PennyProject.Models;
-using System.Diagnostics;
 
 
 namespace PennyProject.Controllers
 {
+  
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
@@ -24,7 +21,17 @@ namespace PennyProject.Controllers
         {
             return View();
         }
-        [HttpPost]
+
+        public async Task<IActionResult> UserIndex()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            
+            var userInfo = await _dbcontext.UserRoles.Where(u=>u.UserId == userId).FirstOrDefaultAsync();
+
+            return View(userInfo);
+        }
+
+        [HttpPost("api/Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
             try
@@ -68,6 +75,49 @@ namespace PennyProject.Controllers
                 {
                     Success = false,
                     Message = "server error"
+                });
+            }
+        }
+
+        [HttpPost("api/UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateRequestDto model)
+        {
+            try
+            {
+                //var userId = HttpContext.Session.GetString("UserId");
+
+                var existingUser = await _dbcontext.UserRoles
+                                   .Where(u => u.UserId == model.UserId && u.UserName == model.UserName)
+                                   .FirstOrDefaultAsync();
+
+                if (existingUser == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                existingUser.UserName = model.UserName;
+                existingUser.Password = model.Password;  
+                existingUser.Email = model.Email;
+                existingUser.Age = model.Age;
+                existingUser.UpdateDateTime = DateTime.Now;
+
+                await _dbcontext.SaveChangesAsync();
+                _logger.LogDebug($"UserName:{model.UserName}, UserInfo Update Susscessful!");
+
+                return Ok(new simpleResponseDto
+                {
+                    Success = true,
+                    Message = "UserInfo Update Susscessful!"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(new simpleResponseDto
+                {
+                    Success = false,
+                    Message = "UserInfo Update Error!"
                 });
             }
         }
