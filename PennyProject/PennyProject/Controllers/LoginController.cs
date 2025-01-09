@@ -121,6 +121,13 @@ namespace PennyProject.Controllers
                 });
             }
         }
+
+        [HttpPost("api/Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();  
+            return Ok();
+        }
     }
    
 }
