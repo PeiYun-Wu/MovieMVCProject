@@ -121,10 +121,13 @@
                     data: JSON.stringify(loginData),
                     success: function (response) {
                         if (response.success) {
-                            alert(response.message);
                             window.location.href = '@Url.Action("Index", "Home")';
                         } else {
-                            alert(response.message);
+                            Swal.fire({
+                                title: 'Login Failed..',
+                                text: response.message,
+                                icon: 'failed'
+                            });
                         }
                     },
                     error: function () {
