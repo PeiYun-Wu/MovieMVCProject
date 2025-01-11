@@ -121,7 +121,7 @@
                     data: JSON.stringify(loginData),
                     success: function (response) {
                         if (response.success) {
-                            window.location.href = '@Url.Action("Index", "Home")';
+                            window.location.href = '@Url.Action("Index", "Movie")';
                         } else {
                             Swal.fire({
                                 title: 'Login Failed..',

@@ -11,12 +11,12 @@ using static PennyProject.Models.MoviePageDto;
 namespace PennyProject.Controllers
 {
    
-    public class HomeController : Controller
+    public class MovieController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<MovieController> _logger;
         private readonly PennyMovieDBContext _dbcontext;
         private readonly IMovieService _movieService;
-        public HomeController(ILogger<HomeController> logger, PennyMovieDBContext dbContext, IMovieService movieService)
+        public MovieController(ILogger<MovieController> logger, PennyMovieDBContext dbContext, IMovieService movieService)
         {
             _logger = logger;
             _dbcontext = dbContext;
