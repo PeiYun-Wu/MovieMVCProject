@@ -1,6 +1,4 @@
-﻿@using PennyProject.DataBase.MovieDB
-@model Dictionary<string, List<MovieInfo>>
-
+﻿@model PennyProject.Models.MoviePageDto.HomePageDto
 
 
 <style>
@@ -128,7 +126,7 @@
 </style>
 
 <div class="container-fluid">
-    @foreach (var country in Model)
+    @foreach (var country in Model.MoviesByCountry)
     {
         <div class="movie-section">
             <h2 class="section-title">@country.Key</h2>
@@ -138,16 +136,13 @@
                     @foreach (var movie in country.Value)
                     {
                         <div class="movie-card">
-                            <img src="~/movieImg/@(movie.ImgName).jpg" alt="@movie.MovieChinessName" class="movie-image">
+                            <img src="~/movieImg/@(movie.MovieImgName).jpg" alt="@movie.MovieChinessName" class="movie-image">
                             <div class="movie-info">
                                 <div class="movie-title">@movie.MovieChinessName</div>
-                                <div class="movie-year">@(movie.ReleaseDateTime?.Year)</div>
+                                <div class="movie-year">@movie.ReleaseDateTime?.Year</div>
                             </div>
-                            @{
-                                var isFavorite = ((List<string>)ViewBag.UserFavorites).Contains(movie.MovieId);
-                                var heartClass = isFavorite ? "fas" : "far";
-                            }
-                            <i class="@heartClass fa-heart favorite-icon" data-movie-id="@movie.MovieId"></i>
+                            <i class="@(movie.IsFavorite ? "fas" : "far") fa-heart favorite-icon"
+                               data-movie-id="@movie.MovieId"></i>
                         </div>
                     }
                 </div>

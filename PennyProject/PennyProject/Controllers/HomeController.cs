@@ -5,6 +5,8 @@ using PennyProject.Models;
 using System.Diagnostics;
 using PennyProject.Models.Enum;
 using static PennyProject.Models.Enum.CountryOrderEnum;
+using PennyProject.Repo;
+using static PennyProject.Models.MoviePageDto;
 
 namespace PennyProject.Controllers
 {
@@ -13,10 +15,12 @@ namespace PennyProject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly PennyMovieDBContext _dbcontext;
-        public HomeController(ILogger<HomeController> logger, PennyMovieDBContext dbContext)
+        private readonly IMovieService _movieService;
+        public HomeController(ILogger<HomeController> logger, PennyMovieDBContext dbContext, IMovieService movieService)
         {
             _logger = logger;
             _dbcontext = dbContext;
+            _movieService = movieService;
         }
 
         public async Task<IActionResult> Index()
@@ -29,45 +33,22 @@ namespace PennyProject.Controllers
                     return RedirectToAction("Login", "Auth");
                 }
 
-                var userFavorites = await _dbcontext.UserFavorites
-                                .Where(f => f.MemberId == userId)
-                                .Select(f => f.MovieId)
-                                .ToListAsync();
-                ViewBag.UserFavorites = userFavorites;
+                var movieInfo = await _movieService.GetHomePageDataAsync(userId);
 
-                var movies = await _dbcontext.MovieInfos.ToListAsync();
-
-                var moviesByCountry = movies
-                    .GroupBy(m => m.Country)
-                    .OrderBy(g => GetCountryOrder(g.Key))
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.OrderByDescending(m => m.ReleaseDateTime).ToList()
-                    );
-
-
-                return View(moviesByCountry);
+                return View(movieInfo);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString(), ex.StackTrace);
+                return View(new HomePageDto
+                {
+                    MoviesByCountry = new Dictionary<string, List<MovieDto>>(),
+                    UserFavorites = new List<string>()
+                });
             }
-            return View();
            
         }
-        private int GetCountryOrder(string country)
-        {
-            return country?.ToLower() switch
-            {
-                "chiness" => (int)CountryOrder.Chiness,
-                "americas" => (int)CountryOrder.Americas,
-                "japan" => (int)CountryOrder.Japan,
-                "korea" => (int)CountryOrder.Korea,
-                "europe" => (int)CountryOrder.Europe,
-                _ => 999
-            };
-        }
-
+     
         public IActionResult Privacy()
         {
             return View();

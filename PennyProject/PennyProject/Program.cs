@@ -17,6 +17,7 @@ builder.Services.AddDbContext<PennyMovieDBContext>(options =>
 #endregion
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddHttpContextAccessor();
 
 #region NLog
