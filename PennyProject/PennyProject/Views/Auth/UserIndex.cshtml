@@ -1,5 +1,5 @@
-﻿@using PennyProject.DataBase.MovieDB
-@model UserRole
+﻿@using PennyProject.Models
+@model UserInfoDto
 
 @{
     ViewData["Title"] = "UserInfo";
@@ -87,7 +87,7 @@
 
             $.ajax({
                 url: '/api/UpdateUser',
-                type: 'POST',
+                type: 'PUT',
                 data: JSON.stringify(formData),
                 contentType: 'application/json',
                 success: function (response) {

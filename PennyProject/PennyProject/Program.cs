@@ -3,6 +3,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using PennyProject.DataBase.MovieDB;
+using PennyProject.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<PennyMovieDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 #endregion
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpContextAccessor();
 
 #region NLog
 var nlogConfig = configuration.GetSection("NLog");
@@ -28,6 +32,8 @@ builder.Host.UseNLog(nlogOptions);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+
+
 
 var app = builder.Build();
 
@@ -46,8 +52,9 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+//first show controller
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Index}/{id?}");
 
 app.Run();

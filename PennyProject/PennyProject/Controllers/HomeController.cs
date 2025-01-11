@@ -26,7 +26,7 @@ namespace PennyProject.Controllers
                 var userId = HttpContext.Session.GetString("UserId");
                 if (userId == null)
                 {
-                    return RedirectToAction("Login", "Login");
+                    return RedirectToAction("Login", "Auth");
                 }
 
                 var userFavorites = await _dbcontext.UserFavorites
