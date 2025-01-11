@@ -18,8 +18,7 @@ namespace PennyProject.Repo
 
         public async Task<HomePageDto> GetHomePageDataAsync(string userId)
         {
-            try
-            {
+           
                 // get user fav
                 var userFavorites = await _dbContext.UserFavorites
                     .Where(f => f.MemberId == userId)
@@ -54,12 +53,7 @@ namespace PennyProject.Repo
                     MoviesByCountry = moviesByCountry,
                     UserFavorites = userFavorites
                 };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting home page data");
-                throw;
-            }
+           
         }
 
         private int GetCountryOrder(string country)
