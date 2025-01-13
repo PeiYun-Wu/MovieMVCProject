@@ -30,7 +30,6 @@ namespace PennyProject.Repo
                     .Select(m => new MovieDto
                     {
                         MovieId = m.MovieId,
-                        Description = m.Description,
                         Country = m.Country,
                         ReleaseDateTime = m.ReleaseDateTime,
                         IsFavorite = userFavorites.Contains(m.MovieId),

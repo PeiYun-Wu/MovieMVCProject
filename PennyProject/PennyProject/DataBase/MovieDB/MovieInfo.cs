@@ -13,8 +13,6 @@ public partial class MovieInfo
 
     public string Country { get; set; } = null!;
 
-    public string? Description { get; set; }
-
     public string? ImgName { get; set; }
 
     public string? Director { get; set; }
