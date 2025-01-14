@@ -80,7 +80,34 @@ namespace PennyProjectTest
             Assert.AreEqual("movie2", result[1].MovieId);
 
         }
+        [Test]
+        public async Task AddFavoriteAsyncTest()
+        {
+            // Arrange
+            _dbContext.MovieInfos.Add(new MovieInfo
+            {
+                MovieId = "movie3",
+                MovieChinessName = "電影3",
+                MovieEngName = "Movie 3",
+                Country = "TW",
+                ImgName = "default_image3"
+            });
+            await _dbContext.SaveChangesAsync();
 
+            // Act
+            var result = await _favService.AddFavoriteAsync("user1", "movie3");
+
+            // Assert
+            var favorite = _dbContext.UserFavorites
+                .FirstOrDefault(f => f.MemberId == "user1" && f.MovieId == "movie3");
+
+            Assert.IsNotNull(favorite);
+            Assert.AreEqual(true, result.Success);
+
+            Assert.AreEqual("user1", favorite.MemberId);
+            Assert.AreEqual("movie3", favorite.MovieId);
+            Assert.AreEqual("電影3", favorite.MovieChinessName);
+        }
 
         [TearDown]
         public void TearDown()
