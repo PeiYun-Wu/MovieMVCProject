@@ -3,17 +3,23 @@ using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using PennyProject.DataBase.MovieDB;
+using PennyProject.Helpers;
 using PennyProject.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
-
 IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json").Build();
+              .AddJsonFile("appsettings.json")
+              .AddJsonFile("appsettings.Development.json")
+              .Build();
 
 #region db context
+string conn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+string connSec = configuration.GetConnectionString("ConnectionSec") ?? "";
+string dbConfig = AESUtill.DecryptAES(conn, connSec);
 builder.Services.AddDbContext<PennyMovieDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+{
+    options.UseSqlServer(dbConfig);
+});
 #endregion
 
 builder.Services.AddScoped<IAuthService, AuthService>();
