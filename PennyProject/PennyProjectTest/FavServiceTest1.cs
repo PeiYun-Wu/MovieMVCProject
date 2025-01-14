@@ -10,7 +10,6 @@ namespace PennyProjectTest
         private PennyMovieDBContext _dbContext;
         private FavService _favService;
 
-
         [SetUp]
         public void Setup()
         {
@@ -107,6 +106,38 @@ namespace PennyProjectTest
             Assert.AreEqual("user1", favorite.MemberId);
             Assert.AreEqual("movie3", favorite.MovieId);
             Assert.AreEqual("電影3", favorite.MovieChinessName);
+        }
+
+        [Test]
+        public async Task RemoveFavoriteAsyncTest()
+        {
+            // Arrange
+            _dbContext.MovieInfos.Add(new MovieInfo
+            {
+                MovieId = "movie5",
+                MovieChinessName = "電影5",
+                MovieEngName = "Movie 5",
+                Country = "TW",
+                ImgName = "default_image5"
+            });
+
+            _dbContext.UserFavorites.Add(new UserFavorite
+            {
+                MovieId = "movie5",
+                MemberId = "user1",
+                MovieChinessName = "電影5",
+            });
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _favService.RemoveFavoriteAsync("user1", "movie5");
+
+            // Assert
+            var favorite = _dbContext.UserFavorites
+                .FirstOrDefault(f => f.MemberId == "user1" && f.MovieId == "movie5");
+
+            Assert.IsNull(favorite, "remove success");
+            Assert.AreEqual(true, result.Success);
         }
 
         [TearDown]
