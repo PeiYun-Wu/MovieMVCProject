@@ -21,14 +21,14 @@ namespace PennyProject.Repo
         }
 
       
-        public async Task<LoginResponseDto> LoginAsync(LoginRequestDto model)
+        public async Task<ApiResponseDto> LoginAsync(LoginRequestDto model)
         {
             var user = await _dbContext.UserRoles
                 .FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user == null)
             {
-                return new LoginResponseDto
+                return new ApiResponseDto
                 {
                     Success = false,
                     Message = "Sorry... Not registered yet"
@@ -37,7 +37,7 @@ namespace PennyProject.Repo
 
             if (user.Password != model.Password)
             {
-                return new LoginResponseDto
+                return new ApiResponseDto
                 {
                     Success = false,
                     Message = "Password Error!"
@@ -47,7 +47,7 @@ namespace PennyProject.Repo
             _httpContextAccessor.HttpContext?.Session.SetString("UserId", user.UserId);
             _logger.LogDebug($"login user : {user.UserName}");
 
-            return new LoginResponseDto
+            return new ApiResponseDto
             {
                 Success = true,
                 Message = $"Login Success! .. Hi {user.UserName}",

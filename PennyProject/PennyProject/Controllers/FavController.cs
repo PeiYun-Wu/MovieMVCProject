@@ -47,6 +47,11 @@ namespace PennyProject.Controllers
             }
         }
 
+        /// <summary>
+        /// 新增最愛電影
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
         [HttpPost("api/Favorite")]
         public async Task<IActionResult> AddFavorite(string movieId)
         {
@@ -72,6 +77,11 @@ namespace PennyProject.Controllers
             }
         }
 
+        /// <summary>
+        /// 移除最愛電影
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns></returns>
         [HttpDelete("api/Favorite")]
         public async Task<IActionResult> RemoveFavorite(string movieId)
         {

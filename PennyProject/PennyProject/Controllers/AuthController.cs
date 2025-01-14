@@ -41,7 +41,7 @@ namespace PennyProject.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred during login");
-                return StatusCode(500, new LoginResponseDto
+                return StatusCode(500, new ApiResponseDto
                 {
                     Success = false,
                     Message = "An error occurred during login"
@@ -77,10 +77,10 @@ namespace PennyProject.Controllers
                 var result = await _authService.UpdateUserInfoAsync(model);
                 if (!result)
                 {
-                    return NotFound(new { message = "User not found" });
+                    return NotFound(new ApiResponseDto {Success = false, Message = "User not found" });
                 }
 
-                return Json(new { success = true, message = "UserInfo Update Successful!" });
+                return Json(new ApiResponseDto{ Success = true, Message = "UserInfo Update Successful!" });
             }
             catch (Exception ex)
             {
