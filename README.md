@@ -3,6 +3,7 @@
 ## 架構
 - .net core8 MVC
 - 資料庫:MSSQL
+- ORM: Entity Framework
 
 ## 簡介
 此為類似netflix的電影網站
@@ -12,3 +13,9 @@
 
 ## 其他
 包含NUnit Test (使用NUnit架構)
+
+## 待更新
+middleware
+註冊功能
+分使用者/管理者權限, DB新增是否為管理者欄位
+管理者:上傳img, 電影info
