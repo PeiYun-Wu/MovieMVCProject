@@ -93,5 +93,41 @@ namespace PennyProject.Repo
             return true;
         }
 
+        public async Task<ApiResponseDto> RegisterAsync(RegisterRequestDto model)
+        {
+            var existingUser = await _dbContext.UserRoles
+                    .FirstOrDefaultAsync(u => u.Email == model.Email);
+
+            if (existingUser != null)
+            {
+                return new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "此電子郵件已被註冊"
+                };
+            }
+
+            string userId = "user_" + Guid.NewGuid().ToString("N");
+
+            var newUser = new UserRole
+            {
+                UserId = userId,
+                Email = model.Email,
+                UserName = model.Username,
+                Password = model.Password,
+                CreateDateTime = DateTime.Now,
+                UpdateDateTime = DateTime.Now
+            };
+
+            await _dbContext.UserRoles.AddAsync(newUser);
+            await _dbContext.SaveChangesAsync();
+
+            return new ApiResponseDto
+            {
+                Success = true,
+                Message = "註冊成功"
+            };
+        }
+
     }
 }

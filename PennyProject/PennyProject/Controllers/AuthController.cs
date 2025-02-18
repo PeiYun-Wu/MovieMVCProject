@@ -50,6 +50,37 @@ namespace PennyProject.Controllers
         }
 
         /// <summary>
+        /// 註冊
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("api/Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto model)
+        {
+            try
+            { 
+                var result = await _authService.RegisterAsync(model);
+                return Json(result);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "register error");
+                return StatusCode(500, new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "register error"
+                });
+            }
+        }
+
+        [HttpGet]
+        [Route("Auth/Register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        /// <summary>
         ///  顯示會員資料
         /// </summary>
         /// <returns></returns>
@@ -95,6 +126,8 @@ namespace PennyProject.Controllers
             HttpContext.Session.Clear();  
             return Ok();
         }
+
+        
     }
    
 }
